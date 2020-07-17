@@ -11,6 +11,9 @@ class Point:
         if self.y ** 2 != self.x ** 3 + a * x + b:
             raise ValueError('({}, {}) is not on the curve'.format(x, y))
     
+    def __repr__(self):
+        return 'Point({}, {})_{}_{}'.format(self.x, self.y, self.a, self.b)
+
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.a == other.a and self.b == other.b
 
@@ -48,6 +51,14 @@ class Point:
             y3 = s * (self.x - x3) - self.y
             return self.__class__(x3, y3, self.a, self.b)
         
-
-    def __str__(self):
-        return 'Point({}, {})_{}_{}'.format(self.x, self.y, self.a, self.b)
+    def __rmul__(self, exp):
+        e = exp
+        mult = self
+        res = self.__class__(None, None, self.a, self.b) # set to identity
+        while e > 0:
+            if e & 1:
+                res += mult
+            mult += mult
+            e >>= 1
+        return res
+   
