@@ -37,6 +37,9 @@ class FieldElement:
         num = (self.num * other.num) % self.prime
         return self.__class__(num, self.prime)
 
+    def __rmul__(self, r):
+        return self.__class__(self.num * r % self.prime, self.prime)
+
     def __pow__(self, exp):
         n = exp % (self.prime - 1)
         num = pow(self.num, n, self.prime)
@@ -45,7 +48,7 @@ class FieldElement:
     def __truediv__(self, other):
         if self.prime != other.prime:
             raise TypeError("Cannot divide two numbers in different fields")
-        num = self.num * other.inv()
+        num = self.num * other.inv().num % self.prime
         return self.__class__(num, self.prime)
     
     def inv(self):
